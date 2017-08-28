@@ -1,0 +1,69 @@
+{
+    "pccc": {
+        "in": {
+            "label": {
+                "name": "pccc in",
+                "endpoint": "PLC",
+                "mode": "Mode",
+                "variable": "Variable",
+                "diff": "Emit only when value changes (diff)",
+                "variable-select": "Select a variable",
+                "variable-novar": "No variables"
+            },
+            "mode": {
+                "single": "Single variable",
+                "all-split": "All variables, one per message",
+                "all": "All variables"
+            }
+        },
+        "out": {
+            "label": {
+                "name": "pccc out",
+                "endpoint": "PLC",
+                "variable": "Variable",
+                "variable-select": "Select a variable"
+            },
+            "disclaimer": "Caution when writing data to production PLCs!"
+        },
+        "endpoint": {
+            "label": {
+                "address": "IP Address",
+                "port": "Port",
+                "userouting": "Use routing?",
+                "routing": "Routing",
+                "cycletime": "Cycle time",
+                "timeout": "Timeout",
+                "tabs": {
+                    "connection": "Connection",
+                    "variables": "Variables"
+                },
+                "variables": {
+                    "list": "Variable list",
+                    "add": "Add",
+                    "clean": "Remove all",
+                    "del": "Remove",
+                    "name": "Name",
+                    "addr": "Address",
+                    "export": "Export",
+                    "import": "Import"
+                }
+            },
+            "status": {
+                "online": "online",
+                "badvalues": "failure",
+                "offline": "offline",
+                "unknown": "unknown"
+            }
+        },
+        "label": {
+            "name": "Name",
+            "select": "Select a device"
+        },
+        "error": {
+            "onconnect": "Error connecting to PLC: ",
+            "badvalues": "Failure (Bad values)",
+            "missingconfig": "Missing configuration",
+            "invalidconntype": "Invalid configuration type \"__connmode__\""
+        }
+    }
+}
