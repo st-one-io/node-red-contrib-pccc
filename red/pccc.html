@@ -121,10 +121,7 @@
 			}
 		},
 		label: function() {
-			return this.name || this.address + ":" + this.port + ":" + (
-				this.connmode == 'tsap' ? 
-				(this.localtsaphi + "." + this.localtsaplo + "/" + this.remotetsaphi + "." + this.remotetsaplo) : 
-				(this.rack + ":" + this.slot));
+			return this.name || this.address + ":" + this.port;
 		},
 		oneditprepare: function() {
 			var self = this;
@@ -334,6 +331,7 @@
 <!-- ######################################################################################## -->
 
 <script type="text/x-red" data-template-name="pccc in">
+	<div class="form-tips"><span><b>WARNING:</b> This is under development and not ready for production!</span></div>
 	<div class="form-row">
 		<label for="node-input-endpoint"><i class="fa fa-bolt"></i> <span data-i18n="pccc.in.label.endpoint"></span></label>
 		<input type="text" id="node-input-endpoint" data-i18n="[placeholder]pccc.in.label.endpoint">
@@ -365,6 +363,7 @@
 
 <script type="text/x-red" data-help-name="pccc in">
 	<p>Reads data from a pccc PLC</p>
+	<div class="form-tips"><span><b>WARNING:</b> This is under development and not ready for production!</span></div>
 	<p>All data is read cyclically from the PLC as configured in the <i>pccc endpoint</i>, but there are three modes of making it available in a flow:</p>
 	<ul>
 		<li><b>Single variable:</b> A single variable can be selected from the configured variables, and a message is sent every cycle, or only when it changes if <i>diff</i> is checked. <code>msg.payload</code> contains the variable's value and <code>msg.topic</code> has the variable's name.</li>
@@ -477,6 +476,7 @@
 <!-- ######################################################################################## -->
 
 <script type="text/x-red" data-template-name="pccc out">
+	<div class="form-tips"><span><b>WARNING:</b> This is under development and not ready for production!</span></div>
 	<div class="form-row">
 		<label for="node-input-endpoint"><i class="fa fa-bolt"></i> <span data-i18n="pccc.out.label.endpoint"></span></label>
 		<input type="text" id="node-input-endpoint" data-i18n="[placeholder]pccc.out.label.endpoint">
@@ -496,6 +496,7 @@
 
 <script type="text/x-red" data-help-name="pccc out">
 	<p>Writes <code>msg.payload</code> to a memory area in a pccc PLC</p>
+	<div class="form-tips"><span><b>WARNING:</b> This is under development and not ready for production!</span></div>
   <p>The variable name can be configured in the node and takes precedence. If left blank it should be set by <code>msg.variable</code> on the incoming message.</p>
 	<p><b>Warning:</b> Caution when writing data to production PLCs!</p>
 </script>
