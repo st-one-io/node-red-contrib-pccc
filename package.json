@@ -4,7 +4,7 @@
   "description": "A Node-RED node to interact with some Allen-Bradley PLCs using PCCC protocol",
   "main": "index.js",
   "dependencies": {
-    "nodepccc": "^0.1.6"
+    "nodepccc": "^0.1.16"
   },
   "repository": {
     "type": "git",
