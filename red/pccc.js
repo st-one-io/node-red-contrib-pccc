@@ -70,6 +70,13 @@ module.exports = function(RED) {
                     text: RED._("pccc.endpoint.status.offline")
                 };
                 break;
+            case 'connecting':
+                obj = {
+                    fill: 'yellow',
+                    shape: 'dot',
+                    text: RED._("pccc.endpoint.status.connecting")
+                };
+                break;
             default:
                 obj = {
                     fill: 'grey',
@@ -87,9 +94,11 @@ module.exports = function(RED) {
         var connOpts;
         var status;
         var readInProgress = false;
-        var readDeferred = false;
+        var readDeferred = 0;
         var vars = config.vartable;
         var isVerbose = !!RED.settings.get('verbose');
+        var connectTimeoutTimer;
+        var connected = false;
         node.writeInProgress = false;
         node.writeQueue = [];
 
@@ -108,11 +117,6 @@ module.exports = function(RED) {
         }
 
         node._vars = createTranslationTable(vars);
-        node._conn = new nodepccc({
-            silent: !isVerbose,
-            debug: isVerbose
-        });
-        node._conn.globalTimeout = parseInt(config.timeout) || 4500;
 
         node.getStatus = function getStatus() {
             return status;
@@ -143,6 +147,8 @@ module.exports = function(RED) {
         }
 
         function writeNext() {
+            if (!connected) return; //keep everything in the queue to try again when we connect back
+
             var nextElm = node.writeQueue[0];
             if(nextElm) {
                 node._conn.writeItems(nextElm.name, nextElm.val, onWritten);
@@ -162,9 +168,9 @@ module.exports = function(RED) {
         function cycleCallback(err, values) {
             readInProgress = false;
 
-            if(readDeferred) {
+            if(readDeferred && connected) {
                 doCycle();
-                readDeferred = false;
+                readDeferred = 0;
             }
 
             if (err) {
@@ -189,20 +195,37 @@ module.exports = function(RED) {
         }
 
         function doCycle() {
-            if(!readInProgress) {
+            if(!readInProgress && connected) {
                 node._conn.readAllItems(cycleCallback);
                 readInProgress = true;
             } else {
-                readDeferred = true;
+                readDeferred++;
+
+                if (readDeferred > 10) {
+                    node.warn(RED._("pccc.error.noresponse"), {});
+                    connect(); //this also drops any existing connection
+                }
             }
         }
 
         function onConnect(err) {
+            clearTimeout(connectTimeoutTimer);
+
             if (err) {
                 manageStatus('offline');
                 node.error(RED._("pccc.error.onconnect") + err.toString());
+
+                connected = false;
+
+                //try to reconnect if failed to connect
+                connectTimeoutTimer = setTimeout(connect, 5000);
+
                 return;
             }
+
+            readInProgress = false;
+            readDeferred = 0;
+            connected = true;
 
             manageStatus('online');
 
@@ -213,16 +236,50 @@ module.exports = function(RED) {
             node._td = setInterval(doCycle, config.cycletime);
         }
 
-        node.on('close', function(done) {
+        function closeConnection(done) {
+            //ensure we won't try to connect again if anybody wants to close it
+            clearTimeout(connectTimeoutTimer);
+
+            manageStatus('offline');
             clearInterval(node._td);
-            node._conn.dropConnection(function() {
-                done();
-            });
-        });
+
+            function doCb() {
+                node._conn = null;
+                if (typeof done == 'function') done();
+            }
+            connected = false;
+
+            if (node._conn) {
+                node._conn.dropConnection(doCb);
+            } else {
+                process.nextTick(doCb);
+            }
+        }
+
+        node.on('close', closeConnection);
+
+        function connect() {
+            function doConnect() {
+                manageStatus('connecting');
+
+                connected = false;
+                node._conn = new nodepccc({
+                    silent: !isVerbose,
+                    debug: isVerbose
+                });
+                node._conn.globalTimeout = parseInt(config.timeout) || 4500;
+                node._conn.initiateConnection(connOpts, onConnect);
+            }
+
+            if (node._conn) {
+                closeConnection(doConnect);
+            } else {
+                process.nextTick(doConnect);
+            }
+        }
 
         manageStatus('offline');
-
-        node._conn.initiateConnection(connOpts, onConnect);
+        connect();
     }
     RED.nodes.registerType("pccc endpoint", pcccEndpoint);
 

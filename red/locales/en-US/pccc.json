@@ -52,6 +52,7 @@
                 "online": "online",
                 "badvalues": "failure",
                 "offline": "offline",
+                "connecting": "connecting",
                 "unknown": "unknown"
             }
         },
@@ -63,6 +64,7 @@
             "onconnect": "Error connecting to PLC: ",
             "badvalues": "Failure (Bad values)",
             "missingconfig": "Missing configuration",
+            "noresponse": "No response from PLC, restarting the communication",
             "invalidconntype": "Invalid configuration type \"__connmode__\""
         }
     }
