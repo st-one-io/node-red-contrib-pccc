@@ -113,7 +113,7 @@ module.exports = function(RED) {
         }
 
         if(config.userouting) {
-            connOpts.routing = new Buffer((config.routing || '').replace(/(0x|,|\.)/g, ''), 'hex');
+            connOpts.routing = Buffer.from((config.routing || '').replace(/(0x|,|\.)/g, ''), 'hex');
         }
 
         node._vars = createTranslationTable(vars);
