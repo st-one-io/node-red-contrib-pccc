@@ -14,6 +14,14 @@
    limitations under the License.
 */
 
+function nrInputShim(node, fn){
+    node.on('input', function(msg, send, done){
+        send = send || node.send;
+        done = done || function(err) { err && node.error(err) }
+        fn(msg, send, done);
+    });
+}
+
 module.exports = function(RED) {
     "use strict";
 
@@ -121,20 +129,21 @@ module.exports = function(RED) {
 
         function onWritten(err) {
             node.writeInProgress = false;
+            var elm = node.writeQueue.shift();
 
             writeNext();
 
             if (err) {
                 manageStatus('badvalues');
-                node.error(RED._("pccc.error.badvalues"));
-                return;
+                elm.done(RED._("pccc.error.badvalues"));
+            } else {
+                manageStatus('online');
+                elm.done();
             }
-
-            manageStatus('online');
         }
 
         function writeNext() {
-            var nextElm = node.writeQueue.shift();
+            var nextElm = node.writeQueue[0];
             if(nextElm) {
                 node._conn.writeItems(nextElm.name, nextElm.val, onWritten);
                 node.writeInProgress = true;
@@ -319,20 +328,21 @@ module.exports = function(RED) {
             node.status(generateStatus(s.status, statusVal));
         }
 
-        function onNewMsg(msg) {
+        function onNewMsg(msg, send, done) {
             var writeObj = {
                 name: config.variable || msg.variable,
-                val: msg.payload
+                val: msg.payload,
+                done: done
             }
 
-            if(!writeObj.name) return;
+            if(!writeObj.name) return done(new Error("Could not identify variable to be written"));
 
             statusVal = writeObj.val;
             node.endpoint.writeVar(writeObj);
             node.status(generateStatus(node.endpoint.getStatus(), statusVal));
         }
 
-        node.on('input', onNewMsg);
+        nrInputShim(node, onNewMsg)
         node.endpoint.on('__STATUS__', onEndpointStatus);
 
         node.on('close', function(done) {
