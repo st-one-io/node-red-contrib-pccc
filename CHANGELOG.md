@@ -1,3 +1,8 @@
+Version: 1.0.1
+------------
+ - Bumps nodepccc, includes fix for connection handling
+ - Updates licensing notes
+
 Version: 1.0.0
 ------------
  - Implement new message handling API of Node-RED 1.0.0
