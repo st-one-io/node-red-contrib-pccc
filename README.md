@@ -48,5 +48,6 @@ Please share your ideas and experiences on the [Node-RED forum](https://discours
 
 
 ## License
+Copyright: (c) 2016-2020, Smart-Tech, Guilherme Francescon Cittolin <guilherme.francescon@netsmarttech.com>
 
-Copyright 2016-2017 Smart-Tech, [Apache 2.0 license](LICENSE).
+GNU General Public License v3.0+ (see [LICENSE](LICENSE) or https://www.gnu.org/licenses/gpl-3.0.txt)
