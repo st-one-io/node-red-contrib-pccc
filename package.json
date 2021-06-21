@@ -8,10 +8,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/netsmarttech/node-red-contrib-pccc.git"
+    "url": "https://github.com/st-one-io/node-red-contrib-pccc.git"
   },
   "bugs": {
-    "url": "https://github.com/netsmarttech/node-red-contrib-pccc/issues"
+    "url": "https://github.com/st-one-io/node-red-contrib-pccc/issues"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -32,6 +32,6 @@
       "pccc": "red/pccc.js"
     }
   },
-  "author": "Smart-Tech",
+  "author": "ST-One Ltda.",
   "license": "GPL-3.0-or-later"
 }
