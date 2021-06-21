@@ -3,7 +3,7 @@
   GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
 -->
 
-<script type="text/x-red" data-template-name="pccc endpoint">
+<script type="text/html" data-template-name="pccc endpoint">
     <div class="form-row">
 		<ul style="background: #fff; min-width: 600px; margin-bottom: 20px;" id="node-config-pccc-endpoint-tabs"></ul>
 	</div>
@@ -56,36 +56,6 @@
 			<!--<input type="hidden" id="node-config-input-vartable">-->
 		</div>
 	</div>
-</script>
-
-<script type="text/x-red" data-help-name="pccc endpoint">
-	<p>Configures the connection to a PLC</p>
-	<p>This node was created by <a href="https://netsmarttech.com" target="_blank">Smart-Tech</a> as part of the <a href="https://netsmarttech.com/page/st-one" target="_blank">ST-One</a> project</p>
-
-	<h3>Details</h3>
-	<p>
-		The <b>Cycle time</b> configuration specifies the time interval in which
-		all variables will be read from the PLC
-	</p>
-	<p>
-		The <b>Timeout</b> parameter sets the maximum amount of time that the PLC
-		may take to answer our requests. It may be desirable to raise this time if
-		the network is busy of it's latency is high
-	</p>
-	<p>
-		You can check the <b>Use routing?</b> option it when routing is needed or
-		when connecting to ControlLogix/CompactLogix controllers. A new field is
-		shown where the routing path can be configured. The last digit of the 
-		default value indicates the slot of the PLC when connecting to 
-		ControlLogix/CompactLogix PLCs
-	</p>
-
-	<h3>Variable addressing</h3>
-	<p>
-		The variables and their addresses configured on the variable list should
-		follow the same syntax as used on RSLogix 500, for example 
-		<code>B3:0/0</code> or <code>F8:1</code>
-	</p>
 </script>
 
 <script type="text/javascript">
@@ -345,7 +315,7 @@
 
 <!-- ######################################################################################## -->
 
-<script type="text/x-red" data-template-name="pccc in">
+<script type="text/html" data-template-name="pccc in">
 	<div class="form-row">
 		<label for="node-input-endpoint"><i class="fa fa-bolt"></i> <span data-i18n="pccc.in.label.endpoint"></span></label>
 		<input type="text" id="node-input-endpoint" data-i18n="[placeholder]pccc.in.label.endpoint">
@@ -373,53 +343,6 @@
 		<label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="pccc.label.name"></span></label>
 		<input type="text" id="node-input-name" data-i18n="[placeholder]pccc.label.name">
 	</div>
-</script>
-
-<script type="text/x-red" data-help-name="pccc in">
-	<p>Reads data from a PLC</p>
-	<p>This node was created by <a href="https://netsmarttech.com" target="_blank">Smart-Tech</a> as part of the <a href="https://netsmarttech.com/page/st-one" target="_blank">ST-One</a> project</p>
-
-	<h3>Outputs</h3>
-	<dl class="message-properties">
-		<dt>payload<span class="property-type">any</span></dt>
-		<dd>
-			The value(s) as read from the PLC. The format and type of the payload
-			depends on the configured "Mode"
-		</dd>
-
-		<dt>topic<span class="property-type">string</span></dt>
-		<dd>
-			The name of the variable, when the message refers to a single variable
-			(that is, when mode is "Single Variable" or "All variables, one per
-			message")
-		</dd>
-	</dl>
-	
-	<h3>Details</h3>
-	<p>
-		All data is read cyclically from the PLC as configured in the <i>pccc endpoint</i>, 
-		but there are three modes of making it available in a flow:
-	</p>
-	<ul>
-		<li>
-			<b>Single variable:</b> A single variable can be selected from the configured 
-			variables, and a message is sent every cycle, or only when it changes if 
-			<i>diff</i> is checked. <code>msg.payload</code> contains the variable's value
-			and <code>msg.topic</code> has the variable's name.
-		</li>
-		<li>
-			<b>All variables, one per message:</b> Like the <i>Single variable</i> mode, 
-			but for all variables configured. If <i>diff</i> is checked, a message is sent
-			everytime any variable changes. If <i>diff</i> is unchecked, one message is sent 
-			for every variable, in every cycle. Care must be taken about the number of 
-			messages per second in this mode.
-		</li>
-		<li>
-			<b>All variables:</b> In this mode, <code>msg.payload</code> contains an object 
-			with all configured variables and their values. If <i>diff</i> is checked, a 
-			message is sent if at least one of the variables changes its value.
-		</li>
-	</ul>
 </script>
 
 <script type="text/javascript">
@@ -525,7 +448,7 @@
 
 <!-- ######################################################################################## -->
 
-<script type="text/x-red" data-template-name="pccc out">
+<script type="text/html" data-template-name="pccc out">
 	<div class="form-row">
 		<label for="node-input-endpoint"><i class="fa fa-bolt"></i> <span data-i18n="pccc.out.label.endpoint"></span></label>
 		<input type="text" id="node-input-endpoint" data-i18n="[placeholder]pccc.out.label.endpoint">
@@ -541,46 +464,6 @@
 		<input type="text" id="node-input-name" data-i18n="[placeholder]pccc.label.name">
 	</div>
 	<div class="form-tips"><span data-i18n="[html]pccc.out.disclaimer"></span></div>
-</script>
-
-<script type="text/x-red" data-help-name="pccc out">
-	<p>Writes <code>msg.payload</code> to a memory area of a PLC</p>
-	<p>This node was created by <a href="https://netsmarttech.com" target="_blank">Smart-Tech</a> as part of the <a href="https://netsmarttech.com/page/st-one" target="_blank">ST-One</a> project</p>
-
-	<p class="form-tips">
-		<b>Caution when writing data to production PLCs!</b><br/>
-		Fully test everything you do. The authors cannot be liable for any
-		damage or injury caused by the use of this node
-	</p>
-
-	<h3>Inputs</h3>
-	<dl class="message-properties">
-		<dt>payload<span class="property-type">string | number | boolean | array</span></dt>
-		<dd>
-			the data to be written. It will be casted to the required data type
-			whenever possible.
-		</dd>
-		
-		<dt>variable<span class="property-type">string | array</span></dt>
-		<dd>
-			the variable to write to on the PLC, according to the variable list
-			on the PLC endpoint. This takes effect <i>only</i> if the "Variable"
-			field is left empty on the configuration.
-		</dd>
-	</dl>
-
-	<h3>Details</h3>
-	<p>
-		Writes data to the PLC on the variable specified on the node configuration
-		or on <code>msg.variable</code>.
-	</p>
-	<p>
-		It is possible to write to multiple variables at once, by setting both 
-		<code>msg.variable</code> and <code>msg.payload</code> to arrays containing 
-		the variable names and their values, respectively. Note that they may not be
-		written in the same write cycle to the PLC, depending on the amount of variables 
-		to be written.
-	</p>
 </script>
 
 <script type="text/javascript">
