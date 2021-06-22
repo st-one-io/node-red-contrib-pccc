@@ -20,9 +20,9 @@
 				<input type="checkbox" id="node-config-input-userouting" style="display: inline-block; width: auto; vertical-align: top;">
 				<label for="node-input-diff" style="width:70%;"><span data-i18n="pccc.endpoint.label.userouting"></span></label>
             </div>
-			<div class="form-row" id="node-config-pccc-endpoint-mode-routing">
+			<div class="form-row" id="node-config-pccc-endpoint-mode-routing" style="padding-left: 20px;">
 				<label for="node-config-input-name"><i class="fa fa-tag"></i> <span data-i18n="pccc.endpoint.label.routing"></span></label>
-				<input type="text" id="node-config-input-routing" data-i18n="[placeholder]pccc.endpoint.label.routing">
+				<input type="text" id="node-config-input-routingbuf" data-i18n="[placeholder]pccc.endpoint.label.routing" style="width: 50%">
 			</div>
 			<div class="form-row">
 				<label for="node-config-input-cycletime"><i class="fa fa-refresh"></i> <span data-i18n="pccc.endpoint.label.cycletime"></span></label>
@@ -87,7 +87,10 @@
 				value: false
 			},
 			routing: {
-				value: "0x01,0x00,0x01,0x00",
+				value: "",
+			},
+			routingbuf: {
+				value: "[1,0]",
 			},
 			cycletime: {
 				value: 500
@@ -216,6 +219,19 @@
 			$("#node-config-input-timeout").spinner({
 				min: 500
 			});
+
+			$("#node-config-input-routingbuf").typedInput({
+				type: "bin",
+				types:["bin"]
+			});
+
+			// migrate to routing buffer
+			if (self.routing) {
+				var convertedRouting = self.routing.replace(/(0x|\s)/g, '').split(',').map(n => parseInt(n, 16)).slice(2).join(',')
+				self.routingbuf = "[" + convertedRouting + "]"
+				delete self.routing;
+				$("#node-config-input-routingbuf").typedInput('value', self.routingbuf);
+			}
 
 			$("#node-config-pccc-endpoint-var-clean").click(cleanVarTable);
 

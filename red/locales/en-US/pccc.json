@@ -30,7 +30,7 @@
                 "address": "IP Address",
                 "port": "Port",
                 "userouting": "Use routing?",
-                "routing": "Routing",
+                "routing": "Route",
                 "cycletime": "Cycle time",
                 "timeout": "Timeout",
                 "tabs": {
@@ -64,6 +64,7 @@
             "onconnect": "Error connecting to PLC: ",
             "badvalues": "Failure (Bad values)",
             "missingconfig": "Missing configuration",
+            "missingroute": "Missing route configuration",
             "noresponse": "No response from PLC, restarting the communication",
             "invalidconntype": "Invalid configuration type \"__connmode__\""
         }
