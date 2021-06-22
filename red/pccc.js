@@ -103,7 +103,16 @@ module.exports = function(RED) {
         }
 
         if(config.userouting) {
-            connOpts.routing = Buffer.from((config.routing || '').replace(/(0x|,|\.)/g, ''), 'hex');
+            if (config.routing) {
+                connOpts.routing = Buffer.from((config.routing || '').replace(/(0x|,|\.)/g, ''), 'hex');
+            } else if (config.routingbuf) {
+                const route = Buffer.from(JSON.parse(config.routingbuf));
+                const routeLen = Buffer.from([Math.ceil(route.length / 2), 0]); //size of route in words
+                connOpts.routing = Buffer.concat([routeLen, route]);
+            } else {
+                node.error(RED._('pccc.error.missingroute'));
+                return;
+            }
         }
 
         node._vars = createTranslationTable(vars);
